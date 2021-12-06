@@ -1,56 +1,44 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import axios from 'axios';
-import logo from './logo.svg';
-import styles from './App.module.scss';
+import React, { useState } from 'react';
 
-function App() {
-  const [paises, setPaises] = useState([]);
-  const [error, setError] = useState('');
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  // Se inicializa el componente App
-  useEffect(() => {
-    // Llamo al endpoint https://restcountries.eu/rest/v2/all?fields=name
-    const getPaises = async () => {
-      // Capturo los posibles errores con try/catch
-      try {
-        const response = await axios.get('https://restcountries.eu/rest/v2/all?fields=name');
-        setPaises(response.data);
-      } catch (err) {
-        setError('Hubo un error al traer los paises');
-      }
-    };
-    getPaises();
-  }, []);
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/auth/login', {
+        username,
+        password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className={styles.App}>
-      <header className={styles.AppHeader}>
-        <img src={logo} className={styles.AppLogo} alt="logo" />
-        <p>
-          Edit&nsbp;
-          {' '}
-          <code>src/App.js</code>
-          {' '}
-          and save to reload.
-        </p>
-        <p>{process.env.REACT_APP_NOT_SECRET_CODE}</p>
-        <p>{process.env.NODE_ENV}</p>
-        {error}
-        Hola
-        {paises.map((pais) => (
-          <p>{pais.name}</p>
-        ))}
-        <a
-          className={styles.AppLink}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Register</h1>
+      <div className="login">
+        <form onSubmit={handleSubmit}>
+          <label>
+            Username
+            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </label>
+          <br />
+          <br />
+          <label>
+            Username
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
+          <br />
+          <br />
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Login;
